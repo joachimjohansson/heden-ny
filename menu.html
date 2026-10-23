@@ -3,13 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f6f1e7">
-  <title>Meny — Hedens Pizzeria Göteborg</title>
+  <meta name="theme-color" content="#1f4d33">
+  <title>Meny · Hedens Pizzeria Göteborg</title>
   <meta name="description" content="Hedens Pizzerias meny: pizza, kebab, falafel och sallader med priser. Wadmansgatan 4, Göteborg. Ring 031-20 70 95.">
+  <link rel="canonical" href="https://joachimjohansson.github.io/heden/menu.html">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="sv_SE">
   <meta property="og:site_name" content="Hedens Pizzeria">
-  <meta property="og:title" content="Meny — Hedens Pizzeria">
+  <meta property="og:title" content="Meny, Hedens Pizzeria">
   <meta property="og:description" content="Pizza, kebab, falafel och sallader på Wadmansgatan 4 i Göteborg.">
   <meta property="og:url" content="https://joachimjohansson.github.io/heden/menu.html">
   <meta property="og:image" content="https://joachimjohansson.github.io/heden/assets/dela.jpg">
@@ -19,9 +20,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261023-18">
-  <link rel="stylesheet" href="menu.css?v=20261023-14">
-  <script src="menu.js?v=20261023-5" defer></script>
+  <link rel="stylesheet" href="styles.css?v=20261024-8">
+  <link rel="stylesheet" href="menu.css?v=20261024-3">
+  <script>document.documentElement.classList.add('js')</script>
+  <script src="menu.js?v=20261024-1" defer></script>
 </head>
 <body class="menu-page">
   <header class="topbar">
@@ -37,16 +39,26 @@
   </header>
 
   <main>
-    <section class="menu-hero">
-      <p class="eyebrow">Hedens Pizzeria · Göteborg</p>
-      <h1>Menyn</h1>
-      <p>Välj bland nygräddade pizzor, kebab, falafel och fräscha sallader.</p>
-      <p class="menu-callout">Allergi eller fråga om innehåll? <a href="tel:+4631207095">Ring oss på 031–20 70 95</a></p>
+    <!-- Menybladets framsida, på det gröna fältet -->
+    <section class="field menu-hero-field" aria-labelledby="titel">
+      <div class="sheet menu-hero">
+        <div class="sheet-text">
+          <h1 id="titel" data-reveal>Menyn</h1>
+          <p class="lead" data-reveal>Hela menyn på Hedens Pizzeria med nummer och priser: pizza, kebab, falafel och sallader. Ring och säg numret, så står maten klar.</p>
+          <div class="actions" data-reveal>
+            <a class="button" href="tel:+4631207095">Ring 031–20 70 95</a>
+          </div>
+          <p class="menu-callout" data-reveal>Allergi eller fråga om innehåll?<br><a href="tel:+4631207095">Ring oss på 031–20 70 95</a></p>
+        </div>
+        <figure class="sheet-plate" data-reveal>
+          <img class="drift" src="assets/pizza-hero.webp" width="819" height="538" alt="Quattro stagioni med skinka, champinjoner, räkor och kronärtskocka">
+        </figure>
+      </div>
     </section>
 
     <!-- Flikarna högst upp. Översta raden är huvudkategorierna, raden under
          visar underkategorierna för den del av menyn man just tittar på.
-         Siffrorna (antal rätter) räknas ut automatiskt av menu.js. -->
+         menu.js markerar fliken för den del man tittar på. -->
     <nav class="menu-tabs" aria-label="Menysektioner">
       <div class="menu-tabs-main">
         <a href="#pizza" data-section="pizza">Pizza</a>
@@ -83,9 +95,11 @@
     <div class="menu-content">
       <section class="food-section" id="pizza">
         <div class="food-section-heading">
-          <p class="eyebrow">Från ugnen</p>
-          <h2>Pizza</h2>
-          <p>* Glutenfri pizzabotten finns. Gäller ej inbakade pizzor eller familjepizzor.</p>
+          <div class="food-section-text" data-reveal>
+            <h2>Pizza</h2>
+            <p>Glutenfri pizzabotten finns, utom till inbakade pizzor och familjepizzor.</p>
+          </div>
+          <figure class="food-plate" data-reveal><img src="assets/pizza-kort.webp" width="800" height="518" alt="Pizza med räkor, ost och persilja" loading="lazy"></figure>
         </div>
 
         <section class="menu-group" id="ordinarie-pizzor">
@@ -232,7 +246,7 @@
           <h3>Salamipizzor</h3>
           <div class="dish-grid">
             <article class="dish-card">
-              <div class="dish-heading"><span class="dish-number">30</span><h4>Cacciatora</h4><span class="dish-price">139 kr</span></div>
+              <div class="dish-heading"><span class="dish-number">30</span><h4>Cacciatore</h4><span class="dish-price">139 kr</span></div>
               <p>Tomatsås, ost, salami, lök, champinjoner</p>
             </article>
             <article class="dish-card">
@@ -405,9 +419,11 @@
 
       <section class="food-section" id="kebab">
         <div class="food-section-heading">
-          <p class="eyebrow">Rullad, grillad och krispig</p>
-          <h2>Kebab &amp; falafel</h2>
-          <p>Serveras med färska grönsaker och sås enligt beskrivningen.</p>
+          <div class="food-section-text" data-reveal>
+            <h2>Kebab &amp; falafel</h2>
+            <p>Serveras med färska grönsaker och mild, stark eller blandad sås.</p>
+          </div>
+          <figure class="food-plate" data-reveal><img src="assets/kebab-kort.webp" width="800" height="442" alt="Kebabtallrik med pommes frites, sallad, tomat och sås" loading="lazy"></figure>
         </div>
 
         <section class="menu-group" id="kebab-eller-kyckling">
@@ -457,9 +473,11 @@
 
       <section class="food-section" id="sallad">
         <div class="food-section-heading">
-          <p class="eyebrow">Fräscht och gott</p>
-          <h2>Sallader</h2>
-          <p>Goda favoriter med krispig sallad och fräscha tillbehör.</p>
+          <div class="food-section-text" data-reveal>
+            <h2>Sallader</h2>
+            <p>Goda favoriter med krispig sallad och fräscha tillbehör.</p>
+          </div>
+          <figure class="food-plate" data-reveal><img src="assets/sallad-kort.webp" width="800" height="557" alt="Sallad i glasskål med skinka, ägg och tomat" loading="lazy"></figure>
         </div>
 
         <section class="menu-group" id="sallader">
@@ -487,13 +505,24 @@
     </div>
   </main>
 
-  <a class="mobile-call-bar" href="tel:+4631207095">Ring 031–20 70 95</a>
 
+  <!-- Baksidan av menybladet -->
   <footer class="footer">
-    <a class="brand footer-brand" href="index.html"><span class="brand-mark" aria-hidden="true">H</span><span>Hedens<br><b>PIZZERIA</b></span></a>
-    <span>Wadmansgatan 4 · 412 53 Göteborg</span>
-    <a href="tel:+4631207095">031–20 70 95</a>
-    <span>© <span class="year">2026</span> Hedens Pizzeria</span>
+    <svg class="scallops" viewBox="0 0 1200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40V20Q50 0 100 20T200 20T300 20T400 20T500 20T600 20T700 20T800 20T900 20T1000 20T1100 20T1200 20V40Z"/></svg>
+    <div class="card-back">
+      <div class="card-back-note">
+        <h2>Smaklig måltid</h2>
+        <p>Ring och beställ, så står maten klar när du kommer. Välkommen in till oss på Wadmansgatan.</p>
+      </div>
+      <div class="card-back-address">
+        <a class="brand footer-brand" href="index.html"><span class="brand-mark" aria-hidden="true">H</span><span>Hedens<br><b>PIZZERIA</b></span></a>
+        <a href="tel:+4631207095">031–20 70 95</a>
+        <a href="https://maps.google.com/?q=Wadmansgatan+4,+412+53+Göteborg" target="_blank" rel="noreferrer">Wadmansgatan 4 · 412 53 Göteborg</a>
+        <a href="index.html">Startsidan</a>
+      </div>
+      <p class="imprint">© <span class="year">2026</span> Hedens Pizzeria</p>
+      <p class="credits">Bild: <a href="https://commons.wikimedia.org/wiki/File:G%C3%B6teborg_1888,_excercis_p%C3%A5_Heden.jpg">”Göteborg 1888, excercis på Heden”</a>, allmän egendom, via Wikimedia Commons.</p>
+    </div>
   </footer>
 </body>
 </html>

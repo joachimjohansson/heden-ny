@@ -1,4 +1,4 @@
-// Startsidan: "Öppet just nu" och årtalet i sidfoten.
+// Startsidan: öppetstatusen, intoningar och årtalet i sidfoten.
 // Öppettiderna läses från öppettidskortet i index.html, så de behöver bara ändras där.
 (() => {
   const dayNames = ['söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag'];
@@ -12,11 +12,11 @@
   };
   const format = (minutes) => `${String(Math.floor(minutes / 60)).padStart(2, '0')}.${String(minutes % 60).padStart(2, '0')}`;
 
-  // Bygg ett schema per veckodag från raderna i HTML.
+  // Bygg ett schema per veckodag från raderna i öppettidskortet.
   const schedule = {};
   rows.forEach((row) => {
-    const [open, close] = row.querySelector('b').textContent.split(/[–-]/).map(toMinutes);
-    row.dataset.days.split(',').forEach((day) => { schedule[Number(day)] = { open, close, row }; });
+    const hours = { open: toMinutes(row.dataset.open), close: toMinutes(row.dataset.close), row };
+    row.dataset.days.split(',').forEach((day) => { schedule[Number(day)] = hours; });
   });
   const closedDates = (hoursCard.dataset.closed || '').split(',').map((d) => d.trim()).filter(Boolean);
 
@@ -44,53 +44,50 @@
     }
     return null;
   };
-  // T.ex. "imorgon kl. 11.00" eller "måndag kl. 11.00"
-  const nextOpening = () => {
-    const next = nextOpenDay();
-    return next && `${next.tomorrow ? 'imorgon' : dayNames[next.day]} kl. ${format(next.open)}`;
-  };
-  // "fredag" -> "fredagar"
+  // "fredag" -> "på fredagar"
   const onDays = (day) => `på ${dayNames[day]}ar`;
 
-  const status = document.getElementById('open-status');
-  const todayHours = document.getElementById('today-hours');
-  const dot = document.getElementById('open-dot');
   const closingNote = document.getElementById('closing-note');
   const heroStatus = document.getElementById('hero-status-text');
   const heroDot = document.getElementById('hero-dot');
 
-  // heroText är den korta raden under rubriken på mobilen.
-  const show = (title, subtitle, note, isOpen, heroText) => {
-    status.textContent = title;
-    todayHours.textContent = subtitle;
+  // Raden under rubriken, t.ex. "Öppet nu · stänger 22.00 på fredagar", och raden i öppettidskortet.
+  const show = (line, note, isOpen) => {
+    heroStatus.textContent = line;
     closingNote.textContent = note;
-    heroStatus.textContent = heroText;
-    dot.classList.toggle('is-open', isOpen);
     heroDot.classList.toggle('is-open', isOpen);
   };
 
   const renderHours = () => {
     const now = swedishDate();
     const today = hoursFor(now);
-    rows.forEach((row) => row.classList.toggle('is-today', schedule[now.day].row === row));
-    const next = nextOpening();
-    const nextDay = nextOpenDay();
+    rows.forEach((row) => row.classList.toggle('is-today', schedule[now.day]?.row === row));
+    const next = nextOpenDay();
+    const nextText = next && `${next.tomorrow ? 'imorgon' : dayNames[next.day]} kl. ${format(next.open)}`;
 
-    // Sista texten i varje show() är raden under rubriken, t.ex. "Öppet nu · stänger 22.00 på fredagar".
     if (!today) {
-      show('Stängt idag', next ? `Öppnar ${next}` : '', 'Vi håller stängt idag.', false,
-        next ? `Stängt idag · öppnar ${next}` : 'Stängt idag');
+      show(nextText ? `Stängt idag · öppnar ${nextText}` : 'Stängt idag', 'Vi håller stängt idag.', false);
     } else if (now.minute < today.open) {
-      show(`Öppnar idag kl. ${format(today.open)}`, `Öppet idag ${format(today.open)}–${format(today.close)}`, `Stänger idag kl. ${format(today.close)}`, false,
-        `Stängt nu · öppnar ${format(today.open)} ${onDays(now.day)}`);
+      show(`Stängt nu · öppnar ${format(today.open)} ${onDays(now.day)}`, `Stänger idag kl. ${format(today.close)}`, false);
     } else if (now.minute < today.close) {
-      show('Öppet nu', `Stänger ${format(today.close)} ${onDays(now.day)}`, `Stänger idag kl. ${format(today.close)}`, true,
-        `Öppet nu · stänger ${format(today.close)} ${onDays(now.day)}`);
+      show(`Öppet nu · stänger ${format(today.close)} ${onDays(now.day)}`, `Stänger idag kl. ${format(today.close)}`, true);
     } else {
-      show(next ? `Öppnar ${next}` : 'Stängt', `Stängde idag kl. ${format(today.close)}`, `Stängde idag kl. ${format(today.close)}`, false,
-        nextDay ? `Stängt nu · öppnar ${format(nextDay.open)} ${onDays(nextDay.day)}` : 'Stängt');
+      show(next ? `Stängt nu · öppnar ${format(next.open)} ${onDays(next.day)}` : 'Stängt', `Stängde idag kl. ${format(today.close)}`, false);
     }
   };
+
+  // --- Intoningar: delarna i varje sektion glider in en gång, i tur och ordning ---
+  if ('IntersectionObserver' in window) {
+    document.querySelectorAll('section, .footer').forEach((section) => {
+      section.querySelectorAll('[data-reveal]').forEach((el, i) => el.style.setProperty('--delay', `${Math.min(i, 6) * 80}ms`));
+    });
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+    document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+  } else {
+    document.querySelectorAll('[data-reveal]').forEach((el) => el.classList.add('is-in'));
+  }
 
   document.querySelectorAll('.year').forEach((el) => { el.textContent = new Date().getFullYear(); });
   renderHours();
